@@ -1,0 +1,23 @@
+indicador,valor,unidad
+Neveras a instalar,1000.0,tiendas
+Tiendas elegibles,12700.0,tiendas
+Tiendas elegibles rentables,4493.0,tiendas
+Ganancia mensual total estimada,251893394.0,COP/mes
+Ganancia anual estimada,3022720734.0,COP/año
+Ganancia promedio por tienda,251893.0,COP/mes
+Ganancia de la tienda n° 1.000,119003.0,COP/mes
+Ventas adicionales totales,1247573578.0,COP/mes
+Costo total de las neveras,60000000.0,COP/mes
+Retorno sobre el costo,4.2,veces
+Efecto promedio de la nevera,27.1,% de ventas
+Efecto por diferencia simple (sesgado),67.5,% de ventas
+"Ganancia regla ""mayores ventas""",209754962.0,COP/mes
+"Ganancia regla ""mayor tráfico""",162810020.0,COP/mes
+Ganancia selección aleatoria,11734188.0,COP/mes
+Ventaja sobre la mejor regla simple,42138432.0,COP/mes
+Ventaja sobre la mejor regla simple (%),20.1,%
+Tiendas de riesgo Alto en la lista,132.0,tiendas
+Umbral de riesgo por costos,0.25,probabilidad
+R² del mejor modelo de ventas,0.7059,R² en test (log)
+ROC-AUC del modelo de riesgo,0.8175,AUC
+PR-AUC del modelo de riesgo,0.3986,AUC

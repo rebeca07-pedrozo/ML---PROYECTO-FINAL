@@ -1,0 +1,9 @@
+supuesto,ganancia_total,coincide_con_lista
+Línea base = ventas observadas (principal),251893394.48436868,1000
+Línea base = predicción del modelo,221006043.81773853,717
+Línea base = media geométrica de ambas,224705239.97793984,873
+Margen 20% en vez de 25%,189514715.58749494,1000
+Margen 30% en vez de 25%,314272073.3812424,1000
+Costo nevera $ 40.000,271893394.4843687,1000
+Costo nevera $ 90.000,221893394.48436868,1000
+Efecto 25 % menor al estimado,173920045.86327648,1000

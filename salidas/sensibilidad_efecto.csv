@@ -1,0 +1,6 @@
+especificación,efecto_log,efecto_%
+"Especificación principal (DR, logs)",0.23953616810306472,27.065964114368278
+"Recorte del propensity a [0.10, 0.90]  (n=31,016)",0.23943118280092668,27.052624755964793
+"Recorte del propensity a [0.15, 0.85]  (n=30,932)",0.23918412548739668,27.021239352971982
+"Todas las tratadas, cualquier dosis (n=38,000)",0.2311899055242276,26.009851639784
+"Solo neveras nuevas, ≤ 2 años (n=19,163)",0.226707668899132,25.44630957556524

@@ -1,0 +1,25 @@
+columna,definicion,unidad
+id_tienda,Identificador único de la tienda,texto
+region / departamento / ciudad,Ubicación comercial y administrativa,texto
+zona,"Urbana, Periurbana o Rural",texto
+tipo_negocio,Formato del punto de venta,texto
+latitud / longitud,Coordenadas para el mapa del tablero,grados
+estrato,Estrato socioeconómico predominante (1 a 6),entero
+temperatura_media_c,Temperatura media de la ubicación,°C
+area_m2,Área del local,m²
+poblacion_500m,Personas en un radio de 500 m,personas
+clientes_prom_dia,Clientes promedio por día abierto,clientes/día
+n_referencias_total,Referencias en el surtido,referencias
+nevera_postobon,La tienda tiene nevera de Postobón (0/1),binaria
+nevera_propia_tienda,El tendero tiene nevera propia (0/1),binaria
+ventas_femsa_cop_mes,"Ventas actuales de FEMSA, sin nevera",COP/mes
+efecto_pct_ventas,Aumento estimado de ventas al instalar la nevera,%
+ventas_adicionales_cop_mes,Ventas adicionales estimadas por la nevera,COP/mes
+ganancia_estimada_cop_mes,"0,25 × ventas adicionales − 60.000",COP/mes
+ranking,Posición de la tienda al ordenar por ganancia estimada (1 = mejor),entero
+seleccionada,Sí = está entre las 1.000 elegidas,Sí/No
+rentable,Sí = la ganancia estimada es positiva,Sí/No
+prob_cambio,Probabilidad estimada de cambiar de proveedor en 6 meses,0 a 1
+riesgo_cambio,"Alto si prob_cambio ≥ 0,25 (umbral por costos del caso)",Alto/Bajo
+en_regla_ventas,Sí = la regla simple de mayores ventas también la elegiría,Sí/No
+en_regla_trafico,Sí = la regla simple de mayor tráfico también la elegiría,Sí/No
