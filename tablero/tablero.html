@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<title>Plan de Neveras FEMSA</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+<style>
+:root{
+  color-scheme:light;
+  --surface-1:#fcfcfb; --page:#f9f9f7; --header:#15233a;
+  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781; --line:#e6e5e1;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --good:#0ca30c; --critical:#d03b3b;
+  --q1:#cde2fb; --q2:#9ec5f4; --q3:#5598e7; --q4:#2a78d6; --q5:#184f95;
+  --gap:16px; --radius:10px;
+}
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme:dark;
+    --surface-1:#1a1a19; --page:#0d0d0d; --header:#10192a;
+    --ink-1:#f0efec; --ink-2:#c3c2b7; --ink-3:#898781; --line:#32312e;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+    --q1:#184f95; --q2:#256abf; --q3:#3987e5; --q4:#6da7ec; --q5:#b7d3f6;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-1:#1a1a19; --page:#0d0d0d; --header:#10192a;
+  --ink-1:#f0efec; --ink-2:#c3c2b7; --ink-3:#898781; --line:#32312e;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --q1:#184f95; --q2:#256abf; --q3:#3987e5; --q4:#6da7ec; --q5:#b7d3f6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+     background:var(--page);color:var(--ink-1);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:var(--gap)}
+header.top{background:var(--header);color:#fff;padding:18px 22px;border-radius:var(--radius);
+           margin-bottom:var(--gap);position:relative}
+header.top h1{font-size:19px;font-weight:650;letter-spacing:-.01em}
+header.top p{font-size:13px;color:rgba(255,255,255,.72);margin-top:3px}
+.theme-btn{position:absolute;top:20px;right:22px;background:rgba(255,255,255,.12);
+           border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;
+           padding:5px 11px;font-size:12px;cursor:pointer}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:var(--surface-1);
+         border:1px solid var(--line);padding:12px 14px;border-radius:var(--radius);
+         margin-bottom:var(--gap)}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fg label{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.fg select,.fg input{padding:6px 9px;border:1px solid var(--line);border-radius:6px;
+                     background:var(--surface-1);color:var(--ink-1);font-size:13px;min-width:140px}
+button.reset{padding:7px 12px;border:1px solid var(--line);border-radius:6px;background:transparent;
+             color:var(--ink-2);font-size:12px;cursor:pointer}
+button.reset:hover{color:var(--ink-1);border-color:var(--ink-3)}
+.count{font-size:12px;color:var(--ink-2);margin-left:auto;align-self:center}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:var(--gap);
+      margin-bottom:var(--gap)}
+.kpi{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.kpi .lab{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.kpi .val{font-size:27px;font-weight:700;letter-spacing:-.02em;margin-top:5px;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:12px;color:var(--ink-2);margin-top:3px}
+.kpi.hero .val{color:var(--s1)}
+.row{display:grid;gap:var(--gap);margin-bottom:var(--gap)}
+.row.r2{grid-template-columns:1.35fr 1fr}
+.row.r3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.card h3{font-size:14px;font-weight:650;margin-bottom:2px}
+.card .note{font-size:12px;color:var(--ink-2);margin-bottom:12px}
+.cv{position:relative;height:300px}
+.cv.tall{height:400px}
+.scale{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-2);margin-top:10px}
+.scale .sw{display:flex;gap:2px}
+.scale .sw i{width:22px;height:9px;border-radius:2px;display:block}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 10px;border-bottom:2px solid var(--line);color:var(--ink-2);
+   font-size:11px;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--ink-1)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+tbody tr:hover{background:rgba(42,120,214,.05)}
+.num{text-align:right}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px}
+.tag.alto{background:rgba(208,59,59,.13);color:var(--critical)}
+.tag.bajo{background:rgba(12,163,12,.13);color:var(--good)}
+.tbl-wrap{overflow-x:auto;max-height:460px;overflow-y:auto}
+footer{font-size:12px;color:var(--ink-2);text-align:center;padding:18px 0 6px}
+.empty{padding:40px;text-align:center;color:var(--ink-2);font-size:14px}
+.falla{max-width:720px;margin:60px auto;background:var(--surface-1);border:1px solid var(--line);
+       border-left:4px solid var(--critical);border-radius:var(--radius);padding:26px 30px}
+.falla h2{font-size:17px;margin-bottom:10px}
+.falla p{font-size:14px;color:var(--ink-2);margin-bottom:8px}
+.falla code{background:var(--page);padding:2px 6px;border-radius:4px;font-size:13px}
+.falla ol{margin:12px 0 0 20px;font-size:14px;color:var(--ink-2)}
+.falla li{margin-bottom:6px}
+@media (max-width:900px){
+  .row.r2,.row.r3{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .wrap{padding:12px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* Datos inyectados por codigo.gs al servir la página */
+const D   = <?!= datos ?>;
+const ERR = <?!= error ?>;
+
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const COP = n => '$ ' + Math.round(n).toLocaleString('es-CO');
+const MM  = n => (n/1e6).toLocaleString('es-CO',{maximumFractionDigits:1}) + ' MM';
+const NUM = n => Math.round(n).toLocaleString('es-CO');
+
+/* ---------- pantalla de error ---------- */
+if (ERR || !D) {
+  document.getElementById('app').innerHTML =
+    '<div class="falla"><h2>No pude leer los datos</h2>' +
+    '<p>' + (ERR || 'Sin datos.') + '</p>' +
+    '<p>Revisa estos puntos:</p><ol>' +
+    '<li>La pestaña con los datos se llama exactamente <code>tablero_tiendas</code>.</li>' +
+    '<li>Importaste <code>tablero_tiendas.csv</code> completo (12.700 filas, 36 columnas).</li>' +
+    '<li>La columna <code>seleccionada</code> tiene valores <code>Sí</code> / <code>No</code>.</li>' +
+    '<li>Tras corregir: <b>Implementar &gt; Gestionar implementaciones &gt; ✏️ &gt; ' +
+    'Versión: Nueva versión &gt; Implementar</b>.</li>' +
+    '</ol></div>';
+} else {
+  arrancar();
+}
+
+function arrancar() {
+document.getElementById('app').innerHTML = `
+<div class="wrap">
+  <header class="top">
+    <h1>Plan de neveras FEMSA — ${NUM(D.tiendas.length)} tiendas</h1>
+    <p>¿En cuáles ${NUM(D.tiendas.length)} tiendas instalar las neveras nuevas, y cuánto se gana cada mes?</p>
+    <button class="theme-btn" id="theme">Tema</button>
+  </header>
+  <div class="filters">
+    <div class="fg"><label for="f-reg">Región</label>
+      <select id="f-reg"><option value="all">Todas</option></select></div>
+    <div class="fg"><label for="f-ciu">Ciudad</label>
+      <select id="f-ciu"><option value="all">Todas</option></select></div>
+    <div class="fg"><label for="f-tip">Tipo de negocio</label>
+      <select id="f-tip"><option value="all">Todos</option></select></div>
+    <div class="fg"><label for="f-rsg">Riesgo de cambio</label>
+      <select id="f-rsg"><option value="all">Todos</option><option value="Alto">Alto</option>
+      <option value="Bajo">Bajo</option></select></div>
+    <div class="fg"><label for="f-id">Consulta por id_tienda</label>
+      <input id="f-id" type="search" placeholder="ej. T02355" autocomplete="off"></div>
+    <button class="reset" id="reset">Limpiar</button>
+    <span class="count" id="count"></span>
+  </div>
+  <section class="kpis" id="kpis"></section>
+  <div class="row r2">
+    <div class="card">
+      <h3>Mapa de las tiendas seleccionadas</h3>
+      <p class="note">Cada punto es una tienda; el color es la ganancia mensual estimada.</p>
+      <div class="cv tall"><canvas id="c-mapa"></canvas></div>
+      <div class="scale"><span>Menor ganancia</span>
+        <span class="sw"><i style="background:var(--q1)"></i><i style="background:var(--q2)"></i><i style="background:var(--q3)"></i><i style="background:var(--q4)"></i><i style="background:var(--q5)"></i></span>
+        <span>Mayor</span></div>
+    </div>
+    <div class="card">
+      <h3>Ganancia por región</h3>
+      <p class="note">Suma de la ganancia mensual estimada.</p>
+      <div class="cv tall"><canvas id="c-region"></canvas></div>
+    </div>
+  </div>
+  <div class="row r2">
+    <div class="card">
+      <h3>Ganancia por tipo de negocio</h3>
+      <p class="note">Suma de la ganancia mensual estimada.</p>
+      <div class="cv"><canvas id="c-tipo"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Riesgo de cambio de proveedor</h3>
+      <p class="note">Tiendas con probabilidad ≥ 0,25 de cambiar en 6 meses.</p>
+      <div class="cv"><canvas id="c-riesgo"></canvas></div>
+    </div>
+  </div>
+  <div class="row r2">
+    <div class="card" id="card-reglas" style="display:none">
+      <h3>Nuestra lista vs las reglas simples</h3>
+      <p class="note">Ganancia mensual total de cada criterio de selección, valorada con el
+        mismo modelo de efecto. Cifras de la lista completa: no responde a los filtros.</p>
+      <div class="cv"><canvas id="c-reglas"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>El efecto crece con el calor</h3>
+      <p class="note">Aumento promedio de ventas por banda de temperatura, sobre las
+        ${NUM(D.meta.nElegibles)} elegibles. No responde a los filtros.</p>
+      <div class="cv"><canvas id="c-temp"></canvas></div>
+    </div>
+  </div>
+  <div class="row" id="row-imp"></div>
+  <div class="card">
+    <h3>Detalle de tiendas</h3>
+    <p class="note">Clic en cualquier encabezado para ordenar. Muestra hasta 100 filas de las que pasan el filtro.</p>
+    <div class="tbl-wrap" id="tabla"></div>
+  </div>
+  <footer>
+    Datos actualizados el ${D.meta.actualizado} · Ganancia = ${D.meta.margen} × ventas adicionales − ${NUM(D.meta.costoNevera)} COP<br>
+    Proyecto final de Machine Learning · Datos simulados con fines académicos:
+    no provienen de FEMSA, Postobón ni de tiendas reales.
+  </footer>
+</div>`;
+
+if (D.importancia && D.importancia.length) {
+  document.getElementById('row-imp').innerHTML =
+    '<div class="card"><h3>¿Qué determina que una nevera rinda?</h3>' +
+    '<p class="note">Importancia de cada variable en el modelo de efecto causal.</p>' +
+    '<div class="cv"><canvas id="c-imp"></canvas></div></div>';
+}
+
+const F = {reg:'all', ciu:'all', tip:'all', rsg:'all', id:''};
+let charts = {}, sortCol = 'gan', sortDir = 'desc';
+
+const filtrar = () => {
+  const q = F.id.trim().toUpperCase();
+  return D.tiendas.filter(t =>
+    (F.reg === 'all' || t.reg === F.reg) &&
+    (F.ciu === 'all' || t.ciu === F.ciu) &&
+    (F.tip === 'all' || t.tip === F.tip) &&
+    (F.rsg === 'all' || t.rsg === F.rsg) &&
+    (q === '' || t.id.toUpperCase().includes(q)));
+};
+
+const llenar = (sel, campo) => {
+  const el = document.getElementById(sel);
+  [...new Set(D.tiendas.map(t => t[campo]))].sort((a,b)=>a.localeCompare(b,'es'))
+    .forEach(v => el.add(new Option(v, v)));
+};
+
+function kpis(f){
+  const g = f.reduce((a,t)=>a+t.gan, 0);
+  const efe = f.length ? f.reduce((a,t)=>a+t.efe,0)/f.length : 0;
+  const alto = f.filter(t=>t.rsg==='Alto').length;
+  const tiles = [
+    {lab:'Ganancia mensual', val:MM(g), sub:MM(g*12)+' al año', hero:true},
+    {lab:'Tiendas', val:NUM(f.length), sub:'de '+NUM(D.meta.nElegibles)+' elegibles'},
+    {lab:'Efecto en la selección', val:'+'+efe.toFixed(1)+' %',
+     sub:'vs +'+D.meta.efectoTodas+' % en todas las elegibles'},
+    {lab:'Ganancia por tienda', val:COP(f.length? g/f.length : 0), sub:'promedio mensual'},
+    {lab:'Riesgo alto', val:NUM(alto),
+     sub:f.length? (100*alto/f.length).toFixed(1)+' % de la selección' : '—'},
+  ];
+  document.getElementById('kpis').innerHTML = tiles.map(t =>
+    `<div class="kpi${t.hero?' hero':''}"><div class="lab">${t.lab}</div>
+     <div class="val">${t.val}</div><div class="sub">${t.sub}</div></div>`).join('');
+}
+
+const BASE = () => ({
+  responsive:true, maintainAspectRatio:false, animation:{duration:220},
+  plugins:{legend:{display:false},
+    tooltip:{backgroundColor:css('--ink-1'), titleColor:css('--surface-1'),
+             bodyColor:css('--surface-1'), padding:10, displayColors:false, cornerRadius:6}}
+});
+const ejes = fmt => ({
+  x:{grid:{display:false}, border:{color:css('--line')}, ticks:{color:css('--ink-3'), font:{size:11}}},
+  y:{grid:{color:css('--line'), drawTicks:false}, border:{display:false},
+     ticks:{color:css('--ink-3'), font:{size:11}, callback:fmt}}
+});
+const ejesH = fmt => ({
+  x:{grid:{color:css('--line'), drawTicks:false}, border:{display:false},
+     ticks:{color:css('--ink-3'), font:{size:11}, callback:fmt}},
+  y:{grid:{display:false}, border:{display:false}, ticks:{color:css('--ink-2'), font:{size:11.5}}}
+});
+/* etiqueta al final de cada barra: el valor nunca depende solo del color */
+const etiquetas = (fmt, horizontal) => ({
+  id:'etq',
+  afterDatasetsDraw(ch){
+    const cx = ch.ctx; cx.save();
+    cx.font = '600 11px -apple-system,Segoe UI,Roboto,sans-serif';
+    cx.fillStyle = css('--ink-2');
+    cx.textAlign = horizontal ? 'left' : 'center';
+    cx.textBaseline = horizontal ? 'middle' : 'bottom';
+    ch.getDatasetMeta(0).data.forEach((bar,i) => {
+      cx.fillText(fmt(ch.data.datasets[0].data[i]),
+                  bar.x + (horizontal ? 7 : 0), bar.y + (horizontal ? 0 : -5));
+    });
+    cx.restore();
+  }
+});
+const agrupar = (f, campo) => {
+  const m = {};
+  f.forEach(t => m[t[campo]] = (m[t[campo]] || 0) + t.gan);
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+};
+
+function construir(f){
+  const B = BASE();
+
+  const qs = [...f].map(t=>t.gan).sort((a,b)=>a-b);
+  const corte = p => qs.length ? qs[Math.floor(p*(qs.length-1))] : 0;
+  const c1=corte(.2), c2=corte(.4), c3=corte(.6), c4=corte(.8);
+  const paso = g => g<=c1?'--q1' : g<=c2?'--q2' : g<=c3?'--q3' : g<=c4?'--q4' : '--q5';
+  charts.mapa = new Chart(document.getElementById('c-mapa'), {
+    type:'scatter',
+    data:{datasets:[{data:f.map(t=>({x:t.lon, y:t.lat, t})),
+      pointRadius:4, pointHoverRadius:7,
+      backgroundColor:f.map(t=>css(paso(t.gan))),
+      borderColor:css('--surface-1'), borderWidth:1}]},
+    options:{...B,
+      plugins:{...B.plugins, tooltip:{...B.plugins.tooltip, callbacks:{
+        title:c=>c[0].raw.t.id,
+        label:c=>{const t=c.raw.t; return [`${t.ciu} · ${t.tip}`,
+          `Ganancia: ${COP(t.gan)}/mes`, `Efecto: +${t.efe} % de ventas`,
+          `Temperatura: ${t.tmp} °C`, `Riesgo: ${t.rsg}`];}}}},
+      scales:{
+        x:{title:{display:true,text:'longitud',color:css('--ink-3'),font:{size:10}},
+           grid:{color:css('--line')},border:{display:false},ticks:{color:css('--ink-3'),font:{size:10}}},
+        y:{title:{display:true,text:'latitud',color:css('--ink-3'),font:{size:10}},
+           grid:{color:css('--line')},border:{display:false},ticks:{color:css('--ink-3'),font:{size:10}}}}}
+  });
+
+  const barraH = (id, datos, color) => new Chart(document.getElementById(id), {
+    type:'bar',
+    data:{labels:datos.map(d=>d[0]),
+      datasets:[{data:datos.map(d=>d[1]), backgroundColor:color,
+        borderRadius:{topRight:4,bottomRight:4}, borderSkipped:false, maxBarThickness:22}]},
+    options:{...B, indexAxis:'y', layout:{padding:{right:56}},
+      plugins:{...B.plugins, tooltip:{...B.plugins.tooltip,
+        callbacks:{label:c=>`${COP(c.parsed.x)}/mes`}}},
+      scales:ejesH(v=>MM(v))},
+    plugins:[etiquetas(v=>MM(v), true)]
+  });
+  charts.region = barraH('c-region', agrupar(f,'reg'), css('--s1'));
+  charts.tipo   = barraH('c-tipo',   agrupar(f,'tip'), css('--s2'));
+
+  const alto = f.filter(t=>t.rsg==='Alto').length;
+  charts.riesgo = new Chart(document.getElementById('c-riesgo'), {
+    type:'doughnut',
+    data:{labels:['Riesgo bajo','Riesgo alto'],
+      datasets:[{data:[f.length-alto, alto],
+        backgroundColor:[css('--good'), css('--critical')],
+        borderColor:css('--surface-1'), borderWidth:2}]},
+    options:{...B, cutout:'62%',
+      plugins:{legend:{display:true, position:'bottom',
+        labels:{color:css('--ink-2'), usePointStyle:true, pointStyle:'circle', padding:14, font:{size:12}}},
+        tooltip:{...B.plugins.tooltip, displayColors:true, callbacks:{
+          label:c=>` ${NUM(c.parsed)} tiendas (${f.length?(100*c.parsed/f.length).toFixed(1):0} %)`}}}}
+  });
+
+  charts.temp = new Chart(document.getElementById('c-temp'), {
+    type:'bar',
+    data:{labels:D.temp.map(d=>d.banda),
+      datasets:[{data:D.temp.map(d=>d.efecto),
+        backgroundColor:['--q1','--q2','--q3','--q4','--q5'].map(v=>css(v)),
+        borderRadius:{topLeft:4,topRight:4}, borderSkipped:false, maxBarThickness:52}]},
+    options:{...B, layout:{padding:{top:18}},
+      plugins:{...B.plugins, tooltip:{...B.plugins.tooltip, callbacks:{
+        label:c=>[`+${c.parsed.y} % de ventas`, `${NUM(D.temp[c.dataIndex].n)} tiendas elegibles`]}}},
+      scales:ejes(v=>v+' %')},
+    plugins:[etiquetas(v=>'+'+v+' %', false)]
+  });
+
+  if (D.reglas && D.reglas.length) {
+    document.getElementById('card-reglas').style.display = '';
+    charts.reglas = new Chart(document.getElementById('c-reglas'), {
+      type:'bar',
+      data:{labels:D.reglas.map(r=>r.nombre.split('\n')),
+        datasets:[{data:D.reglas.map(r=>r.ganancia),
+          backgroundColor:D.reglas.map((r,i)=> i===0 ? css('--s1') : css('--ink-3')),
+          borderRadius:{topLeft:4,topRight:4}, borderSkipped:false, maxBarThickness:58}]},
+      options:{...B, layout:{padding:{top:18}},
+        plugins:{...B.plugins, tooltip:{...B.plugins.tooltip,
+          callbacks:{label:c=>`${COP(c.parsed.y)}/mes`}}},
+        scales:ejes(v=>MM(v))},
+      plugins:[etiquetas(v=>MM(v), false)]
+    });
+  }
+
+  const cimp = document.getElementById('c-imp');
+  if (cimp) {
+    const imp = [...D.importancia].sort((a,b)=>a.importancia-b.importancia);
+    charts.imp = new Chart(cimp, {
+      type:'bar',
+      data:{labels:imp.map(d=>d.variable),
+        datasets:[{data:imp.map(d=>d.importancia), backgroundColor:css('--s3'),
+          borderRadius:{topRight:4,bottomRight:4}, borderSkipped:false, maxBarThickness:18}]},
+      options:{...B, indexAxis:'y', layout:{padding:{right:50}},
+        plugins:{...B.plugins, tooltip:{...B.plugins.tooltip,
+          callbacks:{label:c=>`importancia ${c.parsed.x.toFixed(3)}`}}},
+        scales:ejesH(v=>Number(v).toFixed(3))},
+      plugins:[etiquetas(v=>v.toFixed(3), true)]
+    });
+  }
+}
+
+const COLS = [
+  {k:'rnk', t:'#',            f:NUM, n:true},
+  {k:'id',  t:'id_tienda'},
+  {k:'ciu', t:'Ciudad'},
+  {k:'tip', t:'Tipo'},
+  {k:'tmp', t:'Temp °C',      f:v=>Number(v).toFixed(1), n:true},
+  {k:'cli', t:'Clientes/día', f:NUM, n:true},
+  {k:'ven', t:'Ventas hoy',   f:COP, n:true},
+  {k:'efe', t:'Efecto %',     f:v=>'+'+Number(v).toFixed(1)+' %', n:true},
+  {k:'gan', t:'Ganancia/mes', f:COP, n:true},
+  {k:'rsg', t:'Riesgo'},
+];
+function tabla(f){
+  const cont = document.getElementById('tabla');
+  if(!f.length){ cont.innerHTML = '<div class="empty">Ninguna tienda cumple el filtro.</div>'; return; }
+  const ord = [...f].sort((a,b)=>{
+    const x=a[sortCol], y=b[sortCol];
+    const c = typeof x==='string' ? x.localeCompare(y,'es') : x-y;
+    return sortDir==='asc' ? c : -c;
+  }).slice(0,100);
+  cont.innerHTML = '<table><thead><tr>' + COLS.map(c =>
+      `<th data-k="${c.k}" class="${c.n?'num':''}">${c.t}${sortCol===c.k?(sortDir==='asc'?' ▲':' ▼'):''}</th>`
+    ).join('') + '</tr></thead><tbody>' + ord.map(t => '<tr>' + COLS.map(c => {
+      if(c.k==='rsg') return `<td><span class="tag ${t.rsg.toLowerCase()}">${t.rsg==='Alto'?'▲':'●'} ${t.rsg}</span></td>`;
+      return `<td class="${c.n?'num':''}">${c.f?c.f(t[c.k]):t[c.k]}</td>`;
+    }).join('') + '</tr>').join('') + '</tbody></table>';
+  cont.querySelectorAll('th').forEach(th => th.onclick = () => {
+    const k = th.dataset.k;
+    if(sortCol===k) sortDir = sortDir==='asc' ? 'desc' : 'asc';
+    else { sortCol = k; sortDir = ['id','ciu','tip','rsg'].includes(k) ? 'asc' : 'desc'; }
+    tabla(filtrar());
+  });
+}
+
+function pintar(){
+  const f = filtrar();
+  document.getElementById('count').textContent =
+    `${NUM(f.length)} tienda${f.length===1?'':'s'} en la vista`;
+  kpis(f); tabla(f);
+  Object.values(charts).forEach(c => c.destroy());
+  charts = {};
+  construir(f);
+}
+
+llenar('f-reg','reg'); llenar('f-ciu','ciu'); llenar('f-tip','tip');
+['reg','ciu','tip','rsg'].forEach(k =>
+  document.getElementById('f-'+k).onchange = e => { F[k] = e.target.value; pintar(); });
+let deb;
+document.getElementById('f-id').oninput = e => {
+  clearTimeout(deb); deb = setTimeout(()=>{ F.id = e.target.value; pintar(); }, 200);
+};
+document.getElementById('reset').onclick = () => {
+  Object.keys(F).forEach(k => F[k] = k==='id' ? '' : 'all');
+  ['reg','ciu','tip','rsg'].forEach(k => document.getElementById('f-'+k).value = 'all');
+  document.getElementById('f-id').value = '';
+  pintar();
+};
+document.getElementById('theme').onclick = () => {
+  const oscuro = document.documentElement.dataset.theme === 'dark'
+    || (!document.documentElement.dataset.theme
+        && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = oscuro ? 'light' : 'dark';
+  pintar();
+};
+
+pintar();
+}
+</script>
+</body>
+</html>
