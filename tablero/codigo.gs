@@ -50,6 +50,24 @@ var HOJA_IMPORTANCIA = 'importancia';
 var MARGEN       = 0.25;
 var COSTO_NEVERA = 60000;
 
+/**
+ * Resultados del modelo que NO están en la hoja: salen del cuaderno
+ * notebooks/proyecto_final_neveras.ipynb. Si se vuelve a correr el cuaderno
+ * con otros datos, actualizar estos números aquí.
+ */
+var MODELO = {
+  efectoCausalPct:  27.1,      // efecto estimado con DR-learner
+  efectoNaivePct:   67.5,      // lo que sugiere la diferencia simple de promedios
+  adicionalCausal:  273384,    // COP/mes de venta adicional, estimación causal
+  adicionalNaive:   748474,    // COP/mes, diferencia simple (sesgada)
+  icBajoPct:        25.8,      // intervalo de confianza 95 %
+  icAltoPct:        28.4,
+  r2Ventas:         0.706,     // R² del modelo de ventas en test
+  aucRiesgo:        0.82,      // ROC-AUC del modelo de riesgo
+  umbralRiesgo:     0.25,      // umbral por costos
+  gateCorr:         0.994      // validación GATE del modelo causal
+};
+
 // ============================ PUNTO DE ENTRADA ============================
 
 /** Google llama a esta función cuando alguien abre la URL de la aplicación web. */
@@ -117,6 +135,16 @@ function construirPayload() {
   // elegiria cada regla, asi que la ganancia de cada estrategia sale de la misma hoja.
   var ganSel = 0, ganVentas = 0, ganTrafico = 0;
   var hayReglas = ('en_regla_ventas' in idx) && ('en_regla_trafico' in idx);
+  // Perfil de las tiendas donde nuestra lista y la regla de ventas NO coinciden:
+  // es la comparación que explica por qué el modelo gana.
+  var grupos = {
+    soloNuestra: { n:0, tmp:0, ven:0, gan:0, cli:0 },
+    soloRegla:   { n:0, tmp:0, ven:0, gan:0, cli:0 },
+    ambas:       { n:0, tmp:0, ven:0, gan:0, cli:0 }
+  };
+  var acum = function (g, tmp, ven, gan, cli) {
+    g.n++; g.tmp += tmp; g.ven += ven; g.gan += gan; g.cli += cli;
+  };
   var bandas = [
     { banda: '< 16 °C',  max: 16, suma: 0, n: 0 },
     { banda: '16-20 °C', max: 20, suma: 0, n: 0 },
@@ -141,8 +169,14 @@ function construirPayload() {
     }
 
     if (hayReglas) {
-      if (esSi(r[idx.en_regla_ventas]))  ganVentas  += gan;
+      var enSel = esSi(r[idx.seleccionada]);
+      var enRV  = esSi(r[idx.en_regla_ventas]);
+      if (enRV)                       ganVentas  += gan;
       if (esSi(r[idx.en_regla_trafico])) ganTrafico += gan;
+      var ven = N(r[idx.ventas_femsa_cop_mes]), cli = N(r[idx.clientes_prom_dia]);
+      if (enSel && !enRV)      acum(grupos.soloNuestra, tmp, ven, gan, cli);
+      else if (!enSel && enRV) acum(grupos.soloRegla,   tmp, ven, gan, cli);
+      else if (enSel && enRV)  acum(grupos.ambas,       tmp, ven, gan, cli);
     }
 
     if (esSi(r[idx.seleccionada])) {
@@ -178,6 +212,13 @@ function construirPayload() {
       { nombre: 'Regla: mayores\nventas',         ganancia: ganVentas },
       { nombre: 'Regla: mayor\ntráfico',          ganancia: ganTrafico }
     ] : [],
+    comparativa: hayReglas ? ['soloNuestra', 'soloRegla', 'ambas'].reduce(function (o, k) {
+      var g = grupos[k];
+      o[k] = g.n ? { n:g.n, tmp:g.tmp/g.n, ven:g.ven/g.n, gan:g.gan/g.n, cli:g.cli/g.n }
+                 : { n:0, tmp:0, ven:0, gan:0, cli:0 };
+      return o;
+    }, {}) : null,
+    modelo: MODELO,
     temp: bandas.map(function (b) {
       return { banda: b.banda, efecto: b.n ? Math.round(b.suma / b.n * 10) / 10 : 0, n: b.n };
     }),

@@ -3,106 +3,157 @@
 <head>
 <base target="_top">
 <meta charset="UTF-8">
-<title>Plan de Neveras FEMSA</title>
+<title>Plan de Neveras FEMSA — Informe gerencial</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
 <style>
 :root{
   color-scheme:light;
-  --surface-1:#fcfcfb; --page:#f9f9f7; --header:#15233a;
-  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781; --line:#e6e5e1;
-  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
-  --good:#0ca30c; --critical:#d03b3b;
-  --q1:#cde2fb; --q2:#9ec5f4; --q3:#5598e7; --q4:#2a78d6; --q5:#184f95;
-  --gap:16px; --radius:10px;
-}
-@media (prefers-color-scheme:dark){
-  :root:where(:not([data-theme="light"])){
-    color-scheme:dark;
-    --surface-1:#1a1a19; --page:#0d0d0d; --header:#10192a;
-    --ink-1:#f0efec; --ink-2:#c3c2b7; --ink-3:#898781; --line:#32312e;
-    --s1:#3987e5; --s2:#d95926; --s3:#199e70;
-    --q1:#184f95; --q2:#256abf; --q3:#3987e5; --q4:#6da7ec; --q5:#b7d3f6;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --surface-1:#1a1a19; --page:#0d0d0d; --header:#10192a;
-  --ink-1:#f0efec; --ink-2:#c3c2b7; --ink-3:#898781; --line:#32312e;
-  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
-  --q1:#184f95; --q2:#256abf; --q3:#3987e5; --q4:#6da7ec; --q5:#b7d3f6;
+  /* Tema claro de alto contraste */
+  --page:#eef0f4;          /* plano de la página: gris claro, separa de las tarjetas */
+  --card:#ffffff;          /* superficie de tarjeta: blanco puro */
+  --ink-1:#0b0b0b;         /* tinta primaria  — 18.6:1 sobre blanco */
+  --ink-2:#3d3c3a;         /* tinta secundaria — 10.4:1 */
+  --ink-3:#64625e;         /* tinta de ejes    — 5.9:1  */
+  --line:#d8d9de;          /* bordes visibles, no apenas insinuados */
+  --line-fuerte:#b4b6bd;
+  --marca:#0f2238;         /* azul muy oscuro de encabezado */
+  --s1:#1c5cab;            /* azul serie 1 — 6.2:1 sobre blanco */
+  --s1-claro:#2a78d6;
+  --s2:#c2461a;            /* naranja oscurecido — 5.3:1 */
+  --s3:#0f7a54;            /* verde azulado oscurecido — 5.0:1 */
+  --gris:#75736e;          /* serie de contraste (reglas simples) */
+  --good:#126b12;          /* verde estado   — 6.4:1 */
+  --critical:#a81f1f;      /* rojo estado    — 7.1:1 */
+  --q1:#cde2fb; --q2:#86b6ef; --q3:#3987e5; --q4:#1c5cab; --q5:#0d366b;
+  --gap:18px; --radius:12px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-     background:var(--page);color:var(--ink-1);line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1400px;margin:0 auto;padding:var(--gap)}
-header.top{background:var(--header);color:#fff;padding:18px 22px;border-radius:var(--radius);
-           margin-bottom:var(--gap);position:relative}
-header.top h1{font-size:19px;font-weight:650;letter-spacing:-.01em}
-header.top p{font-size:13px;color:rgba(255,255,255,.72);margin-top:3px}
-.theme-btn{position:absolute;top:20px;right:22px;background:rgba(255,255,255,.12);
-           border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;
-           padding:5px 11px;font-size:12px;cursor:pointer}
-.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:var(--surface-1);
-         border:1px solid var(--line);padding:12px 14px;border-radius:var(--radius);
-         margin-bottom:var(--gap)}
-.fg{display:flex;flex-direction:column;gap:3px}
-.fg label{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
-.fg select,.fg input{padding:6px 9px;border:1px solid var(--line);border-radius:6px;
-                     background:var(--surface-1);color:var(--ink-1);font-size:13px;min-width:140px}
-button.reset{padding:7px 12px;border:1px solid var(--line);border-radius:6px;background:transparent;
-             color:var(--ink-2);font-size:12px;cursor:pointer}
-button.reset:hover{color:var(--ink-1);border-color:var(--ink-3)}
-.count{font-size:12px;color:var(--ink-2);margin-left:auto;align-self:center}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:var(--gap);
-      margin-bottom:var(--gap)}
-.kpi{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
-.kpi .lab{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
-.kpi .val{font-size:27px;font-weight:700;letter-spacing:-.02em;margin-top:5px;font-variant-numeric:tabular-nums}
-.kpi .sub{font-size:12px;color:var(--ink-2);margin-top:3px}
-.kpi.hero .val{color:var(--s1)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,sans-serif;
+     background:var(--page);color:var(--ink-1);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1320px;margin:0 auto;padding:var(--gap)}
+
+/* ---------- portada ---------- */
+.portada{background:var(--marca);color:#fff;border-radius:var(--radius);
+         padding:34px 38px;margin-bottom:26px}
+.portada .eyebrow{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;
+                  color:#8fb4dd;font-weight:700}
+.portada h1{font-size:30px;font-weight:700;letter-spacing:-.02em;margin:8px 0 6px}
+.portada .sub{font-size:15px;color:#c7d6e6;max-width:740px}
+.portada .reco{margin-top:24px;padding-top:22px;border-top:1px solid rgba(255,255,255,.18);
+               display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+.portada .reco .b{font-size:11px;letter-spacing:1px;text-transform:uppercase;
+                  color:#8fb4dd;font-weight:700;margin-bottom:5px}
+.portada .reco .v{font-size:31px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.portada .reco .n{font-size:13px;color:#c7d6e6;margin-top:4px}
+
+/* ---------- secciones ---------- */
+.sec{margin-bottom:34px}
+.sec-head{display:flex;align-items:baseline;gap:13px;margin-bottom:5px}
+.sec-num{width:30px;height:30px;flex:none;border-radius:50%;background:var(--marca);color:#fff;
+         font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;
+         transform:translateY(5px)}
+.sec h2{font-size:21px;font-weight:700;letter-spacing:-.015em}
+.sec .lead{font-size:14.5px;color:var(--ink-2);margin:0 0 17px 43px;max-width:900px}
+
+/* ---------- tarjetas ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      padding:20px 22px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+.card h3{font-size:15px;font-weight:650;margin-bottom:3px;letter-spacing:-.01em}
+.card .note{font-size:12.5px;color:var(--ink-3);margin-bottom:15px}
 .row{display:grid;gap:var(--gap);margin-bottom:var(--gap)}
-.row.r2{grid-template-columns:1.35fr 1fr}
-.row.r3{grid-template-columns:repeat(3,1fr)}
-.card{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
-.card h3{font-size:14px;font-weight:650;margin-bottom:2px}
-.card .note{font-size:12px;color:var(--ink-2);margin-bottom:12px}
+.r2{grid-template-columns:1fr 1fr}
+.r2b{grid-template-columns:1.5fr 1fr}
+.r3{grid-template-columns:repeat(3,1fr)}
 .cv{position:relative;height:300px}
 .cv.tall{height:400px}
-.scale{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-2);margin-top:10px}
-.scale .sw{display:flex;gap:2px}
-.scale .sw i{width:22px;height:9px;border-radius:2px;display:block}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:9px 10px;border-bottom:2px solid var(--line);color:var(--ink-2);
-   font-size:11px;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none;white-space:nowrap}
-th:hover{color:var(--ink-1)}
-td{padding:9px 10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
-tbody tr:hover{background:rgba(42,120,214,.05)}
+.cv.sm{height:250px}
+
+/* ---------- conclusión bajo cada gráfico ---------- */
+.takeaway{margin-top:15px;padding:12px 15px;background:#f3f6fb;border-left:3px solid var(--s1);
+          border-radius:0 7px 7px 0;font-size:13.5px;color:var(--ink-2)}
+.takeaway b{color:var(--ink-1)}
+.takeaway.warn{background:#fdf4ef;border-left-color:var(--s2)}
+
+/* ---------- KPIs ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+      gap:var(--gap);margin-bottom:var(--gap)}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px 19px}
+.kpi .lab{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+.kpi .val{font-size:28px;font-weight:700;letter-spacing:-.025em;margin-top:6px;
+          font-variant-numeric:tabular-nums;color:var(--ink-1)}
+.kpi .sub{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.kpi.hero{border-color:var(--s1);border-width:2px}
+.kpi.hero .val{color:var(--s1)}
+
+/* ---------- tabla comparativa ---------- */
+.vs{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+.vs th{text-align:left;padding:11px 13px;font-size:11px;text-transform:uppercase;
+       letter-spacing:.6px;color:var(--ink-3);border-bottom:2px solid var(--line-fuerte)}
+.vs th.c{text-align:center}
+.vs td{padding:12px 13px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.vs td.c{text-align:center;font-weight:650}
+.vs td.gana{color:var(--s1);font-weight:700}
+.vs td.pierde{color:var(--ink-3)}
+.vs tr:last-child td{border-bottom:none}
+
+/* ---------- filtros y tabla de detalle ---------- */
+.filters{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end;background:var(--card);
+         border:1px solid var(--line);padding:14px 16px;border-radius:var(--radius);
+         margin-bottom:var(--gap)}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.fg select,.fg input{padding:7px 10px;border:1px solid var(--line-fuerte);border-radius:7px;
+                     background:#fff;color:var(--ink-1);font-size:13.5px;min-width:145px}
+.fg select:focus,.fg input:focus{outline:2px solid var(--s1-claro);outline-offset:1px}
+button.reset{padding:8px 13px;border:1px solid var(--line-fuerte);border-radius:7px;
+             background:#fff;color:var(--ink-2);font-size:12.5px;cursor:pointer;font-weight:600}
+button.reset:hover{background:#f3f6fb;border-color:var(--s1);color:var(--s1)}
+.count{font-size:13px;color:var(--ink-2);margin-left:auto;align-self:center;font-weight:600}
+table.det{width:100%;border-collapse:collapse;font-size:13px}
+table.det th{text-align:left;padding:10px 11px;border-bottom:2px solid var(--line-fuerte);
+   color:var(--ink-3);font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+   cursor:pointer;user-select:none;white-space:nowrap;background:#fff;position:sticky;top:0}
+table.det th:hover{color:var(--s1)}
+table.det td{padding:10px 11px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+table.det tbody tr:hover{background:#f3f6fb}
 .num{text-align:right}
-.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px}
-.tag.alto{background:rgba(208,59,59,.13);color:var(--critical)}
-.tag.bajo{background:rgba(12,163,12,.13);color:var(--good)}
-.tbl-wrap{overflow-x:auto;max-height:460px;overflow-y:auto}
-footer{font-size:12px;color:var(--ink-2);text-align:center;padding:18px 0 6px}
-.empty{padding:40px;text-align:center;color:var(--ink-2);font-size:14px}
-.falla{max-width:720px;margin:60px auto;background:var(--surface-1);border:1px solid var(--line);
-       border-left:4px solid var(--critical);border-radius:var(--radius);padding:26px 30px}
-.falla h2{font-size:17px;margin-bottom:10px}
-.falla p{font-size:14px;color:var(--ink-2);margin-bottom:8px}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;
+     padding:3px 9px;border-radius:20px;white-space:nowrap}
+.tag.alto{background:#fbe9e9;color:var(--critical);border:1px solid #f0c9c9}
+.tag.bajo{background:#e7f3e7;color:var(--good);border:1px solid #c9e3c9}
+.tbl-wrap{overflow:auto;max-height:520px}
+.scale{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--ink-3);margin-top:12px}
+.scale .sw{display:flex;gap:2px}
+.scale .sw i{width:26px;height:10px;border-radius:2px;display:block}
+.empty{padding:44px;text-align:center;color:var(--ink-3);font-size:14px}
+footer{font-size:12.5px;color:var(--ink-3);text-align:center;padding:26px 0 10px;
+       border-top:1px solid var(--line);margin-top:10px}
+.falla{max-width:720px;margin:60px auto;background:#fff;border:1px solid var(--line);
+       border-left:5px solid var(--critical);border-radius:var(--radius);padding:28px 32px}
+.falla h2{font-size:18px;margin-bottom:11px}
+.falla p{font-size:14px;color:var(--ink-2);margin-bottom:9px}
 .falla code{background:var(--page);padding:2px 6px;border-radius:4px;font-size:13px}
-.falla ol{margin:12px 0 0 20px;font-size:14px;color:var(--ink-2)}
-.falla li{margin-bottom:6px}
-@media (max-width:900px){
-  .row.r2,.row.r3{grid-template-columns:1fr}
+.falla ol{margin:13px 0 0 20px;font-size:14px;color:var(--ink-2)}
+.falla li{margin-bottom:7px}
+@media (max-width:980px){
+  .r2,.r2b,.r3{grid-template-columns:1fr}
+  .portada .reco{grid-template-columns:1fr;gap:18px}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .wrap{padding:12px}
+  .portada{padding:24px 22px}
+  .portada h1{font-size:23px}
+}
+@media print{
+  body{background:#fff}
+  .filters{display:none}
+  .card,.sec{break-inside:avoid}
 }
 </style>
 </head>
 <body>
 <div id="app"></div>
-
 <script>
-/* Datos inyectados por codigo.gs al servir la página */
+/* Datos inyectados por codigo.gs */
 const D   = <?!= datos ?>;
 const ERR = <?!= error ?>;
 
@@ -110,186 +161,470 @@ const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).
 const COP = n => '$ ' + Math.round(n).toLocaleString('es-CO');
 const MM  = n => (n/1e6).toLocaleString('es-CO',{maximumFractionDigits:1}) + ' MM';
 const NUM = n => Math.round(n).toLocaleString('es-CO');
+const PCT = n => n.toLocaleString('es-CO',{maximumFractionDigits:1}) + ' %';
+const DEC = n => Number(n).toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
 
-/* ---------- pantalla de error ---------- */
 if (ERR || !D) {
   document.getElementById('app').innerHTML =
     '<div class="falla"><h2>No pude leer los datos</h2>' +
-    '<p>' + (ERR || 'Sin datos.') + '</p>' +
-    '<p>Revisa estos puntos:</p><ol>' +
+    '<p>' + (ERR || 'Sin datos.') + '</p><p>Revisa estos puntos:</p><ol>' +
     '<li>La pestaña con los datos se llama exactamente <code>tablero_tiendas</code>.</li>' +
     '<li>Importaste <code>tablero_tiendas.csv</code> completo (12.700 filas, 36 columnas).</li>' +
     '<li>La columna <code>seleccionada</code> tiene valores <code>Sí</code> / <code>No</code>.</li>' +
     '<li>Tras corregir: <b>Implementar &gt; Gestionar implementaciones &gt; ✏️ &gt; ' +
-    'Versión: Nueva versión &gt; Implementar</b>.</li>' +
-    '</ol></div>';
-} else {
-  arrancar();
-}
+    'Versión: Nueva versión &gt; Implementar</b>.</li></ol></div>';
+} else { arrancar(); }
 
-function arrancar() {
+function arrancar(){
+const M = D.modelo, C = D.comparativa;
+const ganTotal = D.tiendas.reduce((a,t)=>a+t.gan, 0);
+const nSel = D.tiendas.length;
+const costoTotal = nSel * D.meta.costoNevera;
+const retorno = ganTotal / costoTotal;
+const altoTotal = D.tiendas.filter(t=>t.rsg==='Alto').length;
+const ganReglaV = D.reglas.length ? D.reglas[1].ganancia : 0;
+const ganReglaT = D.reglas.length ? D.reglas[2].ganancia : 0;
+const mejorRegla = Math.max(ganReglaV, ganReglaT);
+const ventaja = ganTotal - mejorRegla;
+const sesgo = M.adicionalNaive - M.adicionalCausal;
+
 document.getElementById('app').innerHTML = `
 <div class="wrap">
-  <header class="top">
-    <h1>Plan de neveras FEMSA — ${NUM(D.tiendas.length)} tiendas</h1>
-    <p>¿En cuáles ${NUM(D.tiendas.length)} tiendas instalar las neveras nuevas, y cuánto se gana cada mes?</p>
-    <button class="theme-btn" id="theme">Tema</button>
-  </header>
-  <div class="filters">
-    <div class="fg"><label for="f-reg">Región</label>
-      <select id="f-reg"><option value="all">Todas</option></select></div>
-    <div class="fg"><label for="f-ciu">Ciudad</label>
-      <select id="f-ciu"><option value="all">Todas</option></select></div>
-    <div class="fg"><label for="f-tip">Tipo de negocio</label>
-      <select id="f-tip"><option value="all">Todos</option></select></div>
-    <div class="fg"><label for="f-rsg">Riesgo de cambio</label>
-      <select id="f-rsg"><option value="all">Todos</option><option value="Alto">Alto</option>
-      <option value="Bajo">Bajo</option></select></div>
-    <div class="fg"><label for="f-id">Consulta por id_tienda</label>
-      <input id="f-id" type="search" placeholder="ej. T02355" autocomplete="off"></div>
-    <button class="reset" id="reset">Limpiar</button>
-    <span class="count" id="count"></span>
-  </div>
-  <section class="kpis" id="kpis"></section>
-  <div class="row r2">
-    <div class="card">
-      <h3>Mapa de las tiendas seleccionadas</h3>
-      <p class="note">Cada punto es una tienda; el color es la ganancia mensual estimada.</p>
-      <div class="cv tall"><canvas id="c-mapa"></canvas></div>
-      <div class="scale"><span>Menor ganancia</span>
-        <span class="sw"><i style="background:var(--q1)"></i><i style="background:var(--q2)"></i><i style="background:var(--q3)"></i><i style="background:var(--q4)"></i><i style="background:var(--q5)"></i></span>
-        <span>Mayor</span></div>
-    </div>
-    <div class="card">
-      <h3>Ganancia por región</h3>
-      <p class="note">Suma de la ganancia mensual estimada.</p>
-      <div class="cv tall"><canvas id="c-region"></canvas></div>
+
+  <div class="portada">
+    <div class="eyebrow">Equipo de analítica · Informe de decisión</div>
+    <h1>Plan de neveras: dónde instalar las ${NUM(nSel)} unidades nuevas</h1>
+    <p class="sub">Analizamos las ${NUM(D.meta.nElegibles)} tiendas elegibles y estimamos, para cada una,
+      cuánto cambiarían sus ventas si recibiera una nevera. Esta es la lista recomendada
+      y lo que deja al mes.</p>
+    <div class="reco">
+      <div><div class="b">Recomendación</div>
+        <div class="v">${NUM(nSel)} tiendas</div>
+        <div class="n">de ${NUM(D.meta.nElegibles)} elegibles · las de mayor ganancia estimada</div></div>
+      <div><div class="b">Ganancia mensual</div>
+        <div class="v">${MM(ganTotal)}</div>
+        <div class="n">${MM(ganTotal*12)} al año · retorno ${retorno.toFixed(1)}x sobre el costo</div></div>
+      <div><div class="b">Frente a la mejor regla simple</div>
+        <div class="v">+${PCT(100*(ganTotal/mejorRegla-1))}</div>
+        <div class="n">${MM(ventaja)} más al mes que elegir por ventas actuales</div></div>
     </div>
   </div>
-  <div class="row r2">
-    <div class="card">
-      <h3>Ganancia por tipo de negocio</h3>
-      <p class="note">Suma de la ganancia mensual estimada.</p>
-      <div class="cv"><canvas id="c-tipo"></canvas></div>
+
+  <section class="kpis">
+    <div class="kpi hero"><div class="lab">Ganancia mensual</div>
+      <div class="val">${MM(ganTotal)}</div><div class="sub">${COP(ganTotal)}</div></div>
+    <div class="kpi"><div class="lab">Inversión mensual</div>
+      <div class="val">${MM(costoTotal)}</div>
+      <div class="sub">${NUM(nSel)} neveras × ${COP(D.meta.costoNevera)}</div></div>
+    <div class="kpi"><div class="lab">Retorno</div>
+      <div class="val">${retorno.toFixed(1)}x</div>
+      <div class="sub">por cada peso de costo de nevera</div></div>
+    <div class="kpi"><div class="lab">Efecto de la nevera</div>
+      <div class="val">+${PCT(M.efectoCausalPct)}</div>
+      <div class="sub">sobre las ventas · IC 95 % ${M.icBajoPct}–${M.icAltoPct} %</div></div>
+    <div class="kpi"><div class="lab">Tiendas en riesgo</div>
+      <div class="val">${NUM(altoTotal)}</div>
+      <div class="sub">${PCT(100*altoTotal/nSel)} de la lista cambiaría de proveedor</div></div>
+  </section>
+
+  <!-- ====================== 1 ====================== -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-num">1</div>
+      <h2>El punto de partida: la comparación obvia engaña</h2></div>
+    <p class="lead">Las tiendas que hoy tienen nevera venden mucho más que las que no la tienen.
+      Pero las neveras actuales no se instalaron al azar: se pusieron en las mejores tiendas.
+      Confundir esas dos cosas es el error que más dinero cuesta en esta decisión.</p>
+    <div class="row r2b">
+      <div class="card">
+        <h3>Cuánto de la diferencia es realmente la nevera</h3>
+        <p class="note">Venta adicional mensual por tienda, en COP. La barra de la izquierda es lo que
+          sugiere comparar promedios; la de la derecha, lo que estima el modelo causal.</p>
+        <div class="cv"><canvas id="c-sesgo"></canvas></div>
+        <div class="takeaway warn">Comparar promedios sugiere <b>${COP(M.adicionalNaive)}</b> de venta
+          adicional por tienda. El modelo causal estima <b>${COP(M.adicionalCausal)}</b>: el
+          <b>${PCT(100*sesgo/M.adicionalNaive)}</b> de esa diferencia no es la nevera, es que FEMSA
+          ya había elegido las mejores tiendas.</div>
+      </div>
+      <div class="card">
+        <h3>Qué habría pasado con el número equivocado</h3>
+        <p class="note">Consecuencia práctica de usar cada estimación para decidir.</p>
+        <table class="vs">
+          <thead><tr><th></th><th class="c">Comparar<br>promedios</th><th class="c">Modelo<br>causal</th></tr></thead>
+          <tbody>
+            <tr><td>Venta adicional por tienda</td>
+                <td class="c pierde">${COP(M.adicionalNaive)}</td>
+                <td class="c gana">${COP(M.adicionalCausal)}</td></tr>
+            <tr><td>Ganancia por tienda</td>
+                <td class="c pierde">${COP(0.25*M.adicionalNaive-60000)}</td>
+                <td class="c gana">${COP(0.25*M.adicionalCausal-60000)}</td></tr>
+            <tr><td>Tiendas que parecen rentables</td>
+                <td class="c pierde">casi las ${NUM(D.meta.nElegibles)}</td>
+                <td class="c gana">${NUM(D.meta.nRentables)}</td></tr>
+            <tr><td>Conclusión para gerencia</td>
+                <td class="c pierde">"instale donde sea"</td>
+                <td class="c gana">"elija con cuidado"</td></tr>
+          </tbody>
+        </table>
+        <div class="takeaway">Con el número sesgado, cualquier tienda parecería pagar la nevera y no
+          habría nada que decidir. Con el número correcto, solo <b>${NUM(D.meta.nRentables)} de
+          ${NUM(D.meta.nElegibles)}</b> se pagan, y escoger bien vale dinero.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 2 ====================== -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-num">2</div>
+      <h2>Cuánto vale elegir bien</h2></div>
+    <p class="lead">Comparamos nuestra lista contra las dos reglas que se usarían sin modelo:
+      instalar donde más se vende hoy, e instalar donde más gente entra. Las tres listas se valoran
+      con el mismo modelo de efecto, así que lo único que cambia es el criterio de selección.</p>
+    <div class="row r2">
+      <div class="card">
+        <h3>Ganancia mensual según el criterio de selección</h3>
+        <p class="note">Total de las ${NUM(nSel)} tiendas que elegiría cada criterio.</p>
+        <div class="cv"><canvas id="c-reglas"></canvas></div>
+        <div class="takeaway">Nuestra lista deja <b>${MM(ventaja)} más al mes</b> que la mejor regla
+          simple — <b>${MM(ventaja*12)} al año</b> — sin instalar una sola nevera adicional.</div>
+      </div>
+      <div class="card">
+        <h3>De dónde sale la ganancia</h3>
+        <p class="note">Ganancia acumulada al instalar las neveras en orden, de la mejor tienda a la peor.</p>
+        <div class="cv"><canvas id="c-acum"></canvas></div>
+        <div class="takeaway" id="tk-acum"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 3 ====================== -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-num">3</div>
+      <h2>Por qué estas tiendas y no las más grandes</h2></div>
+    <p class="lead">Nuestra lista y la regla de "mayores ventas" coinciden en
+      ${C ? NUM(C.ambas.n) : '—'} tiendas. Las que las separan explican toda la diferencia de resultado.</p>
+    <div class="row r2b">
+      <div class="card">
+        <h3>Las tiendas donde los dos criterios no coinciden</h3>
+        <p class="note">Promedios de los dos grupos en disputa.</p>
+        <table class="vs">
+          <thead><tr><th></th>
+            <th class="c">Solo nuestra lista<br>(${C ? NUM(C.soloNuestra.n) : 0} tiendas)</th>
+            <th class="c">Solo la regla de ventas<br>(${C ? NUM(C.soloRegla.n) : 0} tiendas)</th></tr></thead>
+          <tbody id="tb-vs"></tbody>
+        </table>
+        <div class="takeaway" id="tk-vs"></div>
+      </div>
+      <div class="card">
+        <h3>El calor es lo que manda</h3>
+        <p class="note">Aumento promedio de ventas al instalar la nevera, por temperatura de la zona.
+          Calculado sobre las ${NUM(D.meta.nElegibles)} elegibles.</p>
+        <div class="cv"><canvas id="c-temp"></canvas></div>
+        <div class="takeaway" id="tk-temp"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 4 ====================== -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-num">4</div>
+      <h2>Dónde quedan las neveras</h2></div>
+    <p class="lead">Distribución geográfica y comercial de la lista recomendada.
+      Los filtros del anexo afectan estos tres gráficos.</p>
+    <div class="row r2b">
+      <div class="card">
+        <h3>Mapa de la lista recomendada</h3>
+        <p class="note">Cada punto es una tienda; el color es la ganancia mensual estimada.</p>
+        <div class="cv tall"><canvas id="c-mapa"></canvas></div>
+        <div class="scale"><span>Menor ganancia</span>
+          <span class="sw"><i style="background:var(--q1)"></i><i style="background:var(--q2)"></i><i style="background:var(--q3)"></i><i style="background:var(--q4)"></i><i style="background:var(--q5)"></i></span>
+          <span>Mayor</span></div>
+      </div>
+      <div class="card">
+        <h3>Ganancia por región</h3>
+        <p class="note">Suma de la ganancia mensual estimada.</p>
+        <div class="cv tall"><canvas id="c-region"></canvas></div>
+      </div>
+    </div>
+    <div class="row r2">
+      <div class="card">
+        <h3>Ganancia por tipo de negocio</h3>
+        <p class="note">Suma de la ganancia mensual estimada.</p>
+        <div class="cv"><canvas id="c-tipo"></canvas></div>
+      </div>
+      <div class="card" id="card-imp" style="display:none">
+        <h3>Qué hace que una nevera rinda</h3>
+        <p class="note">Peso de cada variable en el modelo que estima el efecto.</p>
+        <div class="cv"><canvas id="c-imp"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 5 ====================== -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-num">5</div>
+      <h2>Riesgos y supuestos</h2></div>
+    <p class="lead">Lo que puede salir distinto a lo previsto, y qué tan confiable es la estimación.</p>
+    <div class="row r3">
+      <div class="card">
+        <h3>Riesgo de cambio de proveedor</h3>
+        <p class="note">Tiendas de la lista con probabilidad ≥ ${M.umbralRiesgo} de cambiar
+          de proveedor principal en 6 meses.</p>
+        <div class="cv sm"><canvas id="c-riesgo"></canvas></div>
+        <div class="takeaway" id="tk-riesgo"></div>
+      </div>
+      <div class="card">
+        <h3>Qué tan confiable es el modelo</h3>
+        <p class="note">Validación de los tres modelos del proyecto.</p>
+        <table class="vs">
+          <tbody>
+            <tr><td>Efecto de la nevera<br><span style="font-size:12px;color:var(--ink-3)">correlación entre efecto predicho y real por decil</span></td>
+                <td class="c gana">${M.gateCorr}</td></tr>
+            <tr><td>Modelo de ventas<br><span style="font-size:12px;color:var(--ink-3)">R² en datos no vistos</span></td>
+                <td class="c gana">${M.r2Ventas}</td></tr>
+            <tr><td>Riesgo de cambio<br><span style="font-size:12px;color:var(--ink-3)">ROC-AUC</span></td>
+                <td class="c gana">${M.aucRiesgo}</td></tr>
+          </tbody>
+        </table>
+        <div class="takeaway">El modelo de efecto <b>ordena bien</b>: las tiendas que predice como
+          mejores son, de hecho, donde el efecto medido es mayor. Eso es lo que necesita esta decisión.</div>
+      </div>
+      <div class="card">
+        <h3>Supuestos que hay que aceptar</h3>
+        <p class="note">Lo que el análisis da por cierto.</p>
+        <table class="vs">
+          <tbody>
+            <tr><td><b>Sin factores ocultos.</b> Si la fuerza de ventas usó un criterio que no está
+              en los datos, el efecto seguiría sesgado.</td></tr>
+            <tr><td><b>Un solo mes.</b> Sin historia previa no se puede medir el antes y después
+              de cada tienda.</td></tr>
+            <tr><td><b>Sin canibalización.</b> Suponemos que una nevera no le quita ventas
+              a la tienda vecina.</td></tr>
+            <tr><td><b>Margen y costo fijos.</b> ${PCT(100*D.meta.margen)} de margen y
+              ${COP(D.meta.costoNevera)} por nevera al mes.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 6 ====================== -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-num">6</div>
+      <h2>Anexo: detalle por tienda</h2></div>
+    <p class="lead">Consulta operativa de la lista. Los filtros afectan también los gráficos
+      de la sección 4.</p>
+    <div class="filters">
+      <div class="fg"><label for="f-reg">Región</label>
+        <select id="f-reg"><option value="all">Todas</option></select></div>
+      <div class="fg"><label for="f-ciu">Ciudad</label>
+        <select id="f-ciu"><option value="all">Todas</option></select></div>
+      <div class="fg"><label for="f-tip">Tipo de negocio</label>
+        <select id="f-tip"><option value="all">Todos</option></select></div>
+      <div class="fg"><label for="f-rsg">Riesgo de cambio</label>
+        <select id="f-rsg"><option value="all">Todos</option><option value="Alto">Alto</option>
+        <option value="Bajo">Bajo</option></select></div>
+      <div class="fg"><label for="f-id">Consulta por id_tienda</label>
+        <input id="f-id" type="search" placeholder="ej. T02355" autocomplete="off"></div>
+      <button class="reset" id="reset">Limpiar</button>
+      <span class="count" id="count"></span>
     </div>
     <div class="card">
-      <h3>Riesgo de cambio de proveedor</h3>
-      <p class="note">Tiendas con probabilidad ≥ 0,25 de cambiar en 6 meses.</p>
-      <div class="cv"><canvas id="c-riesgo"></canvas></div>
+      <div class="tbl-wrap" id="tabla"></div>
     </div>
-  </div>
-  <div class="row r2">
-    <div class="card" id="card-reglas" style="display:none">
-      <h3>Nuestra lista vs las reglas simples</h3>
-      <p class="note">Ganancia mensual total de cada criterio de selección, valorada con el
-        mismo modelo de efecto. Cifras de la lista completa: no responde a los filtros.</p>
-      <div class="cv"><canvas id="c-reglas"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>El efecto crece con el calor</h3>
-      <p class="note">Aumento promedio de ventas por banda de temperatura, sobre las
-        ${NUM(D.meta.nElegibles)} elegibles. No responde a los filtros.</p>
-      <div class="cv"><canvas id="c-temp"></canvas></div>
-    </div>
-  </div>
-  <div class="row" id="row-imp"></div>
-  <div class="card">
-    <h3>Detalle de tiendas</h3>
-    <p class="note">Clic en cualquier encabezado para ordenar. Muestra hasta 100 filas de las que pasan el filtro.</p>
-    <div class="tbl-wrap" id="tabla"></div>
-  </div>
+  </section>
+
   <footer>
-    Datos actualizados el ${D.meta.actualizado} · Ganancia = ${D.meta.margen} × ventas adicionales − ${NUM(D.meta.costoNevera)} COP<br>
+    Datos actualizados el ${D.meta.actualizado} ·
+    Ganancia = ${D.meta.margen} × ventas adicionales − ${NUM(D.meta.costoNevera)} COP por nevera<br>
     Proyecto final de Machine Learning · Datos simulados con fines académicos:
     no provienen de FEMSA, Postobón ni de tiendas reales.
   </footer>
 </div>`;
 
-if (D.importancia && D.importancia.length) {
-  document.getElementById('row-imp').innerHTML =
-    '<div class="card"><h3>¿Qué determina que una nevera rinda?</h3>' +
-    '<p class="note">Importancia de cada variable en el modelo de efecto causal.</p>' +
-    '<div class="cv"><canvas id="c-imp"></canvas></div></div>';
+/* ======================= textos que dependen de los datos ======================= */
+if (C) {
+  // El color marca de QUIEN es la columna (azul = nuestra lista), no quien "gana":
+  // en ventas actuales la regla nos supera, y eso es justamente lo que queremos mostrar.
+  const fila = (et, a, b, resalta) =>
+    `<tr><td>${resalta ? '<b>'+et+'</b>' : et}</td>
+      <td class="c gana">${a}</td>
+      <td class="c pierde">${b}</td></tr>`;
+  document.getElementById('tb-vs').innerHTML =
+    fila('Temperatura de la zona', DEC(C.soloNuestra.tmp)+' °C', DEC(C.soloRegla.tmp)+' °C') +
+    fila('Ventas actuales de FEMSA', COP(C.soloNuestra.ven), COP(C.soloRegla.ven)) +
+    fila('Clientes por día', NUM(C.soloNuestra.cli), NUM(C.soloRegla.cli)) +
+    fila('Ganancia estimada', COP(C.soloNuestra.gan), COP(C.soloRegla.gan), true);
+  const veces = C.soloRegla.gan > 0 ? C.soloNuestra.gan / C.soloRegla.gan : 0;
+  document.getElementById('tk-vs').innerHTML =
+    `La regla de ventas escoge tiendas con <b>${COP(C.soloRegla.ven - C.soloNuestra.ven)} más</b>
+     de venta mensual, y aun así rinden <b>${veces.toFixed(1)} veces menos</b>. Está comprando
+     tamaño en zonas frías, donde una nevera agrega poco. Nosotros compramos
+     <b>capacidad de respuesta</b>.`;
 }
 
-const F = {reg:'all', ciu:'all', tip:'all', rsg:'all', id:''};
+{
+  const b = D.temp, p = b[b.length-1].efecto, q = b[0].efecto;
+  document.getElementById('tk-temp').innerHTML =
+    `En zonas de más de 28 °C la nevera sube las ventas <b>+${PCT(p)}</b>; por debajo de 16 °C,
+     solo <b>+${PCT(q)}</b>. Es la variable que más pesa, y explica por qué la lista se concentra
+     en la costa.`;
+}
+
+/* ======================= gráficos ======================= */
 let charts = {}, sortCol = 'gan', sortDir = 'desc';
+const F = {reg:'all', ciu:'all', tip:'all', rsg:'all', id:''};
 
-const filtrar = () => {
-  const q = F.id.trim().toUpperCase();
-  return D.tiendas.filter(t =>
-    (F.reg === 'all' || t.reg === F.reg) &&
-    (F.ciu === 'all' || t.ciu === F.ciu) &&
-    (F.tip === 'all' || t.tip === F.tip) &&
-    (F.rsg === 'all' || t.rsg === F.rsg) &&
-    (q === '' || t.id.toUpperCase().includes(q)));
-};
-
-const llenar = (sel, campo) => {
-  const el = document.getElementById(sel);
-  [...new Set(D.tiendas.map(t => t[campo]))].sort((a,b)=>a.localeCompare(b,'es'))
-    .forEach(v => el.add(new Option(v, v)));
-};
-
-function kpis(f){
-  const g = f.reduce((a,t)=>a+t.gan, 0);
-  const efe = f.length ? f.reduce((a,t)=>a+t.efe,0)/f.length : 0;
-  const alto = f.filter(t=>t.rsg==='Alto').length;
-  const tiles = [
-    {lab:'Ganancia mensual', val:MM(g), sub:MM(g*12)+' al año', hero:true},
-    {lab:'Tiendas', val:NUM(f.length), sub:'de '+NUM(D.meta.nElegibles)+' elegibles'},
-    {lab:'Efecto en la selección', val:'+'+efe.toFixed(1)+' %',
-     sub:'vs +'+D.meta.efectoTodas+' % en todas las elegibles'},
-    {lab:'Ganancia por tienda', val:COP(f.length? g/f.length : 0), sub:'promedio mensual'},
-    {lab:'Riesgo alto', val:NUM(alto),
-     sub:f.length? (100*alto/f.length).toFixed(1)+' % de la selección' : '—'},
-  ];
-  document.getElementById('kpis').innerHTML = tiles.map(t =>
-    `<div class="kpi${t.hero?' hero':''}"><div class="lab">${t.lab}</div>
-     <div class="val">${t.val}</div><div class="sub">${t.sub}</div></div>`).join('');
-}
-
-const BASE = () => ({
-  responsive:true, maintainAspectRatio:false, animation:{duration:220},
-  plugins:{legend:{display:false},
-    tooltip:{backgroundColor:css('--ink-1'), titleColor:css('--surface-1'),
-             bodyColor:css('--surface-1'), padding:10, displayColors:false, cornerRadius:6}}
-});
+const TIP = {backgroundColor:'#0b0b0b', titleColor:'#ffffff', bodyColor:'#ffffff',
+             padding:11, cornerRadius:7, displayColors:false, titleFont:{size:13},
+             bodyFont:{size:12.5}};
+const BASE = {responsive:true, maintainAspectRatio:false, animation:{duration:220},
+              plugins:{legend:{display:false}, tooltip:TIP}};
 const ejes = fmt => ({
-  x:{grid:{display:false}, border:{color:css('--line')}, ticks:{color:css('--ink-3'), font:{size:11}}},
-  y:{grid:{color:css('--line'), drawTicks:false}, border:{display:false},
-     ticks:{color:css('--ink-3'), font:{size:11}, callback:fmt}}
+  x:{grid:{display:false}, border:{color:css('--line-fuerte')},
+     ticks:{color:css('--ink-3'), font:{size:11.5}}},
+  y:{grid:{color:css('--line')}, border:{display:false},
+     ticks:{color:css('--ink-3'), font:{size:11.5}, callback:fmt}}
 });
 const ejesH = fmt => ({
-  x:{grid:{color:css('--line'), drawTicks:false}, border:{display:false},
-     ticks:{color:css('--ink-3'), font:{size:11}, callback:fmt}},
-  y:{grid:{display:false}, border:{display:false}, ticks:{color:css('--ink-2'), font:{size:11.5}}}
+  x:{grid:{color:css('--line')}, border:{display:false},
+     ticks:{color:css('--ink-3'), font:{size:11.5}, callback:fmt}},
+  y:{grid:{display:false}, border:{display:false},
+     ticks:{color:css('--ink-2'), font:{size:12}}}
 });
-/* etiqueta al final de cada barra: el valor nunca depende solo del color */
+/* el valor va escrito junto a la barra: nunca depende solo del color */
 const etiquetas = (fmt, horizontal) => ({
   id:'etq',
   afterDatasetsDraw(ch){
     const cx = ch.ctx; cx.save();
-    cx.font = '600 11px -apple-system,Segoe UI,Roboto,sans-serif';
+    cx.font = '700 11.5px -apple-system,Segoe UI,Roboto,sans-serif';
     cx.fillStyle = css('--ink-2');
     cx.textAlign = horizontal ? 'left' : 'center';
     cx.textBaseline = horizontal ? 'middle' : 'bottom';
     ch.getDatasetMeta(0).data.forEach((bar,i) => {
       cx.fillText(fmt(ch.data.datasets[0].data[i]),
-                  bar.x + (horizontal ? 7 : 0), bar.y + (horizontal ? 0 : -5));
+                  bar.x + (horizontal ? 8 : 0), bar.y + (horizontal ? 0 : -6));
     });
     cx.restore();
   }
 });
+
+/* ---- 1. descomposición del sesgo (barras apiladas) ---- */
+charts.sesgo = new Chart(document.getElementById('c-sesgo'), {
+  type:'bar',
+  data:{labels:[['Comparar promedios','(diferencia simple)'],['Modelo causal','(DR-learner)']],
+    datasets:[
+      {label:'Efecto real de la nevera', data:[M.adicionalCausal, M.adicionalCausal],
+       backgroundColor:css('--s1'), maxBarThickness:92,
+       borderRadius:{topLeft:0,topRight:0}, borderSkipped:false},
+      {label:'Sesgo: eran mejores tiendas desde antes', data:[sesgo, 0],
+       backgroundColor:css('--gris'), maxBarThickness:92,
+       borderRadius:{topLeft:5,topRight:5}, borderSkipped:false}
+    ]},
+  options:{...BASE, layout:{padding:{top:22}},
+    plugins:{legend:{display:true, position:'bottom',
+      labels:{color:css('--ink-2'), usePointStyle:true, pointStyle:'rect', padding:15,
+              font:{size:12}, boxWidth:11, boxHeight:11}},
+      tooltip:{...TIP, displayColors:true, callbacks:{label:c=>` ${c.dataset.label}: ${COP(c.parsed.y)}`}}},
+    scales:{x:{stacked:true, grid:{display:false}, border:{color:css('--line-fuerte')},
+               ticks:{color:css('--ink-2'), font:{size:12}}},
+            y:{stacked:true, grid:{color:css('--line')}, border:{display:false},
+               ticks:{color:css('--ink-3'), font:{size:11.5}, callback:v=>'$ '+(v/1000)+' mil'}}}},
+  plugins:[{id:'tot', afterDatasetsDraw(ch){
+    const cx = ch.ctx; cx.save();
+    cx.font='700 13px -apple-system,Segoe UI,Roboto,sans-serif';
+    cx.fillStyle=css('--ink-1'); cx.textAlign='center'; cx.textBaseline='bottom';
+    const tot=[M.adicionalNaive, M.adicionalCausal];
+    ch.getDatasetMeta(1).data.forEach((bar,i)=>{
+      const y = i===0 ? bar.y : ch.getDatasetMeta(0).data[i].y;
+      cx.fillText(COP(tot[i]), bar.x, y-7);
+    });
+    cx.restore();
+  }}]
+});
+
+/* ---- 2a. reglas simples ---- */
+if (D.reglas && D.reglas.length) {
+  charts.reglas = new Chart(document.getElementById('c-reglas'), {
+    type:'bar',
+    data:{labels:D.reglas.map(r=>r.nombre.split('\n')),
+      datasets:[{data:D.reglas.map(r=>r.ganancia),
+        backgroundColor:D.reglas.map((r,i)=> i===0 ? css('--s1') : css('--gris')),
+        borderRadius:{topLeft:5,topRight:5}, borderSkipped:false, maxBarThickness:76}]},
+    options:{...BASE, layout:{padding:{top:22}},
+      plugins:{...BASE.plugins, tooltip:{...TIP, callbacks:{label:c=>`${COP(c.parsed.y)} al mes`}}},
+      scales:ejes(v=>MM(v))},
+    plugins:[etiquetas(v=>MM(v), false)]
+  });
+}
+
+/* ---- 2b. ganancia acumulada ---- */
+{
+  const ord = [...D.tiendas].sort((a,b)=>b.gan-a.gan);
+  const pts = [], paso = Math.max(1, Math.round(ord.length/180));
+  let ac = 0;
+  ord.forEach((t,i) => { ac += t.gan; if (i % paso === 0 || i === ord.length-1) pts.push({x:i+1, y:ac}); });
+  const mitad = ord.findIndex((t,i) => ord.slice(0,i+1).reduce((a,x)=>a+x.gan,0) >= ganTotal/2) + 1;
+  charts.acum = new Chart(document.getElementById('c-acum'), {
+    type:'line',
+    data:{datasets:[{data:pts, borderColor:css('--s1'), borderWidth:2.5,
+      backgroundColor:'rgba(28,92,171,.10)', fill:true, pointRadius:0, pointHoverRadius:6, tension:.25}]},
+    options:{...BASE, interaction:{mode:'index', intersect:false},
+      plugins:{...BASE.plugins, tooltip:{...TIP, callbacks:{
+        title:c=>`Primeras ${NUM(c[0].parsed.x)} tiendas`,
+        label:c=>[`${COP(c.parsed.y)} al mes`,
+                  `${PCT(100*c.parsed.y/ganTotal)} de la ganancia total`]}}},
+      scales:{x:{type:'linear', grid:{display:false}, border:{color:css('--line-fuerte')},
+                 title:{display:true, text:'neveras instaladas', color:css('--ink-3'), font:{size:11.5}},
+                 ticks:{color:css('--ink-3'), font:{size:11.5}}},
+              y:{grid:{color:css('--line')}, border:{display:false},
+                 ticks:{color:css('--ink-3'), font:{size:11.5}, callback:v=>MM(v)}}}}
+  });
+  document.getElementById('tk-acum').innerHTML =
+    `Las primeras <b>${NUM(mitad)} tiendas</b> aportan la mitad de la ganancia. La número
+     ${NUM(nSel)} todavía deja <b>${COP(ord[ord.length-1].gan)}</b> al mes, muy por encima de cero:
+     <b>ampliar el plan seguiría siendo rentable</b>.`;
+}
+
+/* ---- 3. efecto por temperatura ---- */
+charts.temp = new Chart(document.getElementById('c-temp'), {
+  type:'bar',
+  data:{labels:D.temp.map(d=>d.banda),
+    datasets:[{data:D.temp.map(d=>d.efecto),
+      backgroundColor:['--q1','--q2','--q3','--q4','--q5'].map(v=>css(v)),
+      borderRadius:{topLeft:5,topRight:5}, borderSkipped:false, maxBarThickness:60}]},
+  options:{...BASE, layout:{padding:{top:22}},
+    plugins:{...BASE.plugins, tooltip:{...TIP, callbacks:{
+      label:c=>[`+${PCT(c.parsed.y)} de ventas`,
+                `${NUM(D.temp[c.dataIndex].n)} tiendas elegibles`]}}},
+    scales:ejes(v=>v+' %')},
+  plugins:[etiquetas(v=>'+'+PCT(v), false)]
+});
+
+/* ---- 5. riesgo ---- */
+charts.riesgo = new Chart(document.getElementById('c-riesgo'), {
+  type:'doughnut',
+  data:{labels:['Riesgo bajo','Riesgo alto'],
+    datasets:[{data:[nSel-altoTotal, altoTotal],
+      backgroundColor:[css('--good'), css('--critical')],
+      borderColor:'#ffffff', borderWidth:3}]},
+  options:{...BASE, cutout:'60%',
+    plugins:{legend:{display:true, position:'bottom',
+      labels:{color:css('--ink-2'), usePointStyle:true, pointStyle:'circle', padding:15, font:{size:12.5}}},
+      tooltip:{...TIP, displayColors:true,
+        callbacks:{label:c=>` ${NUM(c.parsed)} tiendas (${PCT(100*c.parsed/nSel)})`}}}}
+});
+document.getElementById('tk-riesgo').innerHTML =
+  `<b>${NUM(altoTotal)} de las ${NUM(nSel)}</b> tiendas de la lista tienen riesgo alto.
+   Conviene cruzarlas con la campaña de retención: una nevera nueva es, además,
+   un argumento de permanencia.`;
+
+/* ---- 4. gráficos que responden a los filtros ---- */
 const agrupar = (f, campo) => {
   const m = {};
   f.forEach(t => m[t[campo]] = (m[t[campo]] || 0) + t.gan);
   return Object.entries(m).sort((a,b)=>b[1]-a[1]);
 };
-
-function construir(f){
-  const B = BASE();
-
+function construirFiltrables(f){
   const qs = [...f].map(t=>t.gan).sort((a,b)=>a-b);
   const corte = p => qs.length ? qs[Math.floor(p*(qs.length-1))] : 0;
   const c1=corte(.2), c2=corte(.4), c3=corte(.6), c4=corte(.8);
@@ -297,105 +632,73 @@ function construir(f){
   charts.mapa = new Chart(document.getElementById('c-mapa'), {
     type:'scatter',
     data:{datasets:[{data:f.map(t=>({x:t.lon, y:t.lat, t})),
-      pointRadius:4, pointHoverRadius:7,
+      pointRadius:4.5, pointHoverRadius:8,
       backgroundColor:f.map(t=>css(paso(t.gan))),
-      borderColor:css('--surface-1'), borderWidth:1}]},
-    options:{...B,
-      plugins:{...B.plugins, tooltip:{...B.plugins.tooltip, callbacks:{
+      borderColor:'#ffffff', borderWidth:1}]},
+    options:{...BASE,
+      plugins:{...BASE.plugins, tooltip:{...TIP, callbacks:{
         title:c=>c[0].raw.t.id,
-        label:c=>{const t=c.raw.t; return [`${t.ciu} · ${t.tip}`,
-          `Ganancia: ${COP(t.gan)}/mes`, `Efecto: +${t.efe} % de ventas`,
-          `Temperatura: ${t.tmp} °C`, `Riesgo: ${t.rsg}`];}}}},
-      scales:{
-        x:{title:{display:true,text:'longitud',color:css('--ink-3'),font:{size:10}},
-           grid:{color:css('--line')},border:{display:false},ticks:{color:css('--ink-3'),font:{size:10}}},
-        y:{title:{display:true,text:'latitud',color:css('--ink-3'),font:{size:10}},
-           grid:{color:css('--line')},border:{display:false},ticks:{color:css('--ink-3'),font:{size:10}}}}}
+        label:c=>{const t=c.raw.t; return [`${t.ciu} · ${t.tip}`, `Ganancia: ${COP(t.gan)}/mes`,
+          `Efecto: +${PCT(t.efe)} de ventas`, `Temperatura: ${DEC(t.tmp)} °C`, `Riesgo: ${t.rsg}`];}}}},
+      scales:{x:{title:{display:true,text:'longitud',color:css('--ink-3'),font:{size:11}},
+                 grid:{color:css('--line')},border:{display:false},
+                 ticks:{color:css('--ink-3'),font:{size:11}}},
+              y:{title:{display:true,text:'latitud',color:css('--ink-3'),font:{size:11}},
+                 grid:{color:css('--line')},border:{display:false},
+                 ticks:{color:css('--ink-3'),font:{size:11}}}}}
   });
-
   const barraH = (id, datos, color) => new Chart(document.getElementById(id), {
     type:'bar',
     data:{labels:datos.map(d=>d[0]),
       datasets:[{data:datos.map(d=>d[1]), backgroundColor:color,
-        borderRadius:{topRight:4,bottomRight:4}, borderSkipped:false, maxBarThickness:22}]},
-    options:{...B, indexAxis:'y', layout:{padding:{right:56}},
-      plugins:{...B.plugins, tooltip:{...B.plugins.tooltip,
-        callbacks:{label:c=>`${COP(c.parsed.x)}/mes`}}},
+        borderRadius:{topRight:5,bottomRight:5}, borderSkipped:false, maxBarThickness:24}]},
+    options:{...BASE, indexAxis:'y', layout:{padding:{right:62}},
+      plugins:{...BASE.plugins, tooltip:{...TIP, callbacks:{label:c=>`${COP(c.parsed.x)} al mes`}}},
       scales:ejesH(v=>MM(v))},
     plugins:[etiquetas(v=>MM(v), true)]
   });
   charts.region = barraH('c-region', agrupar(f,'reg'), css('--s1'));
   charts.tipo   = barraH('c-tipo',   agrupar(f,'tip'), css('--s2'));
-
-  const alto = f.filter(t=>t.rsg==='Alto').length;
-  charts.riesgo = new Chart(document.getElementById('c-riesgo'), {
-    type:'doughnut',
-    data:{labels:['Riesgo bajo','Riesgo alto'],
-      datasets:[{data:[f.length-alto, alto],
-        backgroundColor:[css('--good'), css('--critical')],
-        borderColor:css('--surface-1'), borderWidth:2}]},
-    options:{...B, cutout:'62%',
-      plugins:{legend:{display:true, position:'bottom',
-        labels:{color:css('--ink-2'), usePointStyle:true, pointStyle:'circle', padding:14, font:{size:12}}},
-        tooltip:{...B.plugins.tooltip, displayColors:true, callbacks:{
-          label:c=>` ${NUM(c.parsed)} tiendas (${f.length?(100*c.parsed/f.length).toFixed(1):0} %)`}}}}
-  });
-
-  charts.temp = new Chart(document.getElementById('c-temp'), {
-    type:'bar',
-    data:{labels:D.temp.map(d=>d.banda),
-      datasets:[{data:D.temp.map(d=>d.efecto),
-        backgroundColor:['--q1','--q2','--q3','--q4','--q5'].map(v=>css(v)),
-        borderRadius:{topLeft:4,topRight:4}, borderSkipped:false, maxBarThickness:52}]},
-    options:{...B, layout:{padding:{top:18}},
-      plugins:{...B.plugins, tooltip:{...B.plugins.tooltip, callbacks:{
-        label:c=>[`+${c.parsed.y} % de ventas`, `${NUM(D.temp[c.dataIndex].n)} tiendas elegibles`]}}},
-      scales:ejes(v=>v+' %')},
-    plugins:[etiquetas(v=>'+'+v+' %', false)]
-  });
-
-  if (D.reglas && D.reglas.length) {
-    document.getElementById('card-reglas').style.display = '';
-    charts.reglas = new Chart(document.getElementById('c-reglas'), {
-      type:'bar',
-      data:{labels:D.reglas.map(r=>r.nombre.split('\n')),
-        datasets:[{data:D.reglas.map(r=>r.ganancia),
-          backgroundColor:D.reglas.map((r,i)=> i===0 ? css('--s1') : css('--ink-3')),
-          borderRadius:{topLeft:4,topRight:4}, borderSkipped:false, maxBarThickness:58}]},
-      options:{...B, layout:{padding:{top:18}},
-        plugins:{...B.plugins, tooltip:{...B.plugins.tooltip,
-          callbacks:{label:c=>`${COP(c.parsed.y)}/mes`}}},
-        scales:ejes(v=>MM(v))},
-      plugins:[etiquetas(v=>MM(v), false)]
-    });
-  }
-
-  const cimp = document.getElementById('c-imp');
-  if (cimp) {
-    const imp = [...D.importancia].sort((a,b)=>a.importancia-b.importancia);
-    charts.imp = new Chart(cimp, {
-      type:'bar',
-      data:{labels:imp.map(d=>d.variable),
-        datasets:[{data:imp.map(d=>d.importancia), backgroundColor:css('--s3'),
-          borderRadius:{topRight:4,bottomRight:4}, borderSkipped:false, maxBarThickness:18}]},
-      options:{...B, indexAxis:'y', layout:{padding:{right:50}},
-        plugins:{...B.plugins, tooltip:{...B.plugins.tooltip,
-          callbacks:{label:c=>`importancia ${c.parsed.x.toFixed(3)}`}}},
-        scales:ejesH(v=>Number(v).toFixed(3))},
-      plugins:[etiquetas(v=>v.toFixed(3), true)]
-    });
-  }
 }
 
+if (D.importancia && D.importancia.length) {
+  document.getElementById('card-imp').style.display = '';
+  const imp = [...D.importancia].sort((a,b)=>a.importancia-b.importancia);
+  charts.imp = new Chart(document.getElementById('c-imp'), {
+    type:'bar',
+    data:{labels:imp.map(d=>d.variable),
+      datasets:[{data:imp.map(d=>d.importancia), backgroundColor:css('--s3'),
+        borderRadius:{topRight:5,bottomRight:5}, borderSkipped:false, maxBarThickness:19}]},
+    options:{...BASE, indexAxis:'y', layout:{padding:{right:56}},
+      plugins:{...BASE.plugins, tooltip:{...TIP,
+        callbacks:{label:c=>`importancia ${c.parsed.x.toFixed(3)}`}}},
+      scales:ejesH(v=>Number(v).toFixed(3))},
+    plugins:[etiquetas(v=>v.toFixed(3), true)]
+  });
+}
+
+/* ======================= anexo: filtros y tabla ======================= */
+const filtrar = () => {
+  const q = F.id.trim().toUpperCase();
+  return D.tiendas.filter(t =>
+    (F.reg === 'all' || t.reg === F.reg) && (F.ciu === 'all' || t.ciu === F.ciu) &&
+    (F.tip === 'all' || t.tip === F.tip) && (F.rsg === 'all' || t.rsg === F.rsg) &&
+    (q === '' || t.id.toUpperCase().includes(q)));
+};
+const llenar = (sel, campo) => {
+  const el = document.getElementById(sel);
+  [...new Set(D.tiendas.map(t => t[campo]))].sort((a,b)=>a.localeCompare(b,'es'))
+    .forEach(v => el.add(new Option(v, v)));
+};
 const COLS = [
   {k:'rnk', t:'#',            f:NUM, n:true},
   {k:'id',  t:'id_tienda'},
   {k:'ciu', t:'Ciudad'},
   {k:'tip', t:'Tipo'},
-  {k:'tmp', t:'Temp °C',      f:v=>Number(v).toFixed(1), n:true},
+  {k:'tmp', t:'Temp °C',      f:DEC, n:true},
   {k:'cli', t:'Clientes/día', f:NUM, n:true},
   {k:'ven', t:'Ventas hoy',   f:COP, n:true},
-  {k:'efe', t:'Efecto %',     f:v=>'+'+Number(v).toFixed(1)+' %', n:true},
+  {k:'efe', t:'Efecto',       f:v=>'+'+PCT(Number(v)), n:true},
   {k:'gan', t:'Ganancia/mes', f:COP, n:true},
   {k:'rsg', t:'Riesgo'},
 ];
@@ -407,7 +710,7 @@ function tabla(f){
     const c = typeof x==='string' ? x.localeCompare(y,'es') : x-y;
     return sortDir==='asc' ? c : -c;
   }).slice(0,100);
-  cont.innerHTML = '<table><thead><tr>' + COLS.map(c =>
+  cont.innerHTML = '<table class="det"><thead><tr>' + COLS.map(c =>
       `<th data-k="${c.k}" class="${c.n?'num':''}">${c.t}${sortCol===c.k?(sortDir==='asc'?' ▲':' ▼'):''}</th>`
     ).join('') + '</tr></thead><tbody>' + ord.map(t => '<tr>' + COLS.map(c => {
       if(c.k==='rsg') return `<td><span class="tag ${t.rsg.toLowerCase()}">${t.rsg==='Alto'?'▲':'●'} ${t.rsg}</span></td>`;
@@ -420,17 +723,14 @@ function tabla(f){
     tabla(filtrar());
   });
 }
-
 function pintar(){
   const f = filtrar();
   document.getElementById('count').textContent =
-    `${NUM(f.length)} tienda${f.length===1?'':'s'} en la vista`;
-  kpis(f); tabla(f);
-  Object.values(charts).forEach(c => c.destroy());
-  charts = {};
-  construir(f);
+    `${NUM(f.length)} de ${NUM(nSel)} tiendas`;
+  tabla(f);
+  ['mapa','region','tipo'].forEach(k => { if(charts[k]) charts[k].destroy(); });
+  construirFiltrables(f);
 }
-
 llenar('f-reg','reg'); llenar('f-ciu','ciu'); llenar('f-tip','tip');
 ['reg','ciu','tip','rsg'].forEach(k =>
   document.getElementById('f-'+k).onchange = e => { F[k] = e.target.value; pintar(); });
@@ -444,14 +744,6 @@ document.getElementById('reset').onclick = () => {
   document.getElementById('f-id').value = '';
   pintar();
 };
-document.getElementById('theme').onclick = () => {
-  const oscuro = document.documentElement.dataset.theme === 'dark'
-    || (!document.documentElement.dataset.theme
-        && matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.dataset.theme = oscuro ? 'light' : 'dark';
-  pintar();
-};
-
 pintar();
 }
 </script>
