@@ -66,6 +66,11 @@ El cuaderno busca la base en `datos/base_refrescos_nevera.csv`, en el directorio
 │   ├── tablero_tiendas.csv            Insumo principal del tablero
 │   ├── tablero_kpis.csv               Indicadores de resumen
 │   └── ...                            Métricas, importancias, validaciones
+├── tablero/                           Insumos del tablero
+│   ├── mockup_tablero.html            Mockup interactivo (abrir con doble clic)
+│   ├── GUIA_LOOKER_STUDIO.md          Cómo replicarlo en Looker Studio
+│   ├── apps_script_tablero.gs         Código para pegar en Google Sheets
+│   └── formulas_google_sheets.md      Alternativa con fórmulas
 ├── nb_parts/                          Fuente del cuaderno, por módulo
 ├── build_notebook.py                  Regenera el .ipynb desde nb_parts/
 ├── requirements.txt
@@ -75,6 +80,22 @@ El cuaderno busca la base en `datos/base_refrescos_nevera.csv`, en el directorio
 > `nb_parts/` y `build_notebook.py` son solo la herramienta con la que se arma el cuaderno, para poder
 > editar cada módulo por separado sin tocar el JSON del `.ipynb`. Correr `python build_notebook.py`
 > reconstruye `notebooks/proyecto_final_neveras.ipynb`. **No es necesario** para usar el proyecto.
+
+---
+
+## El tablero
+
+La carpeta `tablero/` trae un **mockup funcional** (`mockup_tablero.html`) con los datos
+reales de las 1.000 tiendas: filtros por región, ciudad y tipo de negocio, mapa, consulta
+por `id_tienda`, comparación con las reglas simples y riesgo de cambio. Abre con doble clic
+y **funciona sin internet**, así que sirve de respaldo el día de la sustentación.
+
+Es el plano de lo que hay que construir en Looker Studio, no el entregable.
+El paso a paso está en `tablero/GUIA_LOOKER_STUDIO.md`.
+
+La fuente de datos del tablero es **`salidas/tablero_tiendas.csv`** (12.700 elegibles ×
+36 columnas), no `salidas/lista_grupoDaniJohelRebe.csv`, que es el entregable de 3 columnas
+que se sube al profesor.
 
 ---
 
