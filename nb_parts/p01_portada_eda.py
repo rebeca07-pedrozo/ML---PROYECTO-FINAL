@@ -87,7 +87,8 @@ EFECTIVIDAD_RETENCION= 0.40     # 40 %
 N_NEVERAS            = 1_000    # neveras a instalar
 AREA_MIN_SI_POSTOBON = 12.0     # m2: si tiene nevera Postobon y area < 12 no es elegible
 
-GRUPO = 'X'                     # <<< CAMBIAR por el numero de su grupo (ej. '3')
+GRUPO = 'DaniJohelRebe'         # <<< identificador del grupo; define el nombre del entregable
+                                #     Si el profesor asigno un NUMERO de grupo, usar ese ('3').
 
 # Estetica de los graficos
 plt.rcParams.update({'figure.dpi':110, 'figure.figsize':(9,4.5), 'axes.grid':True,

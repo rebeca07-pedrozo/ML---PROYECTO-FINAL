@@ -3,7 +3,8 @@ id_tienda,Identificador único de la tienda,texto
 region / departamento / ciudad,Ubicación comercial y administrativa,texto
 zona,"Urbana, Periurbana o Rural",texto
 tipo_negocio,Formato del punto de venta,texto
-latitud / longitud,Coordenadas para el mapa del tablero,grados
+latitud / longitud,Coordenadas de la tienda,grados
+lat_long,"Las dos coordenadas en un campo, para el mapa de Looker Studio (tipo Geo)","lat, lon"
 estrato,Estrato socioeconómico predominante (1 a 6),entero
 temperatura_media_c,Temperatura media de la ubicación,°C
 area_m2,Área del local,m²

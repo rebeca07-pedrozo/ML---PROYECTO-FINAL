@@ -76,6 +76,9 @@ COLS_TABLERO = ['id_tienda','region','departamento','ciudad','zona','tipo_negoci
                 'ventas_femsa_cop_mes','ventas_postobon_cop_mes','share_femsa_valor']
 
 tablero = ELEG[[c for c in COLS_TABLERO if c in ELEG.columns]].copy()
+# Looker Studio necesita latitud y longitud en UN solo campo de tipo Geo ("lat, lon").
+tablero['lat_long']                 = (ELEG.latitud.round(5).astype(str) + ', ' +
+                                       ELEG.longitud.round(5).astype(str))
 tablero['efecto_pct_ventas']        = ((np.exp(ELEG.tau_log)-1)*100).round(2)
 tablero['ventas_adicionales_cop_mes'] = ELEG.ventas_adicionales_cop.round(0).astype('int64')
 tablero['ganancia_estimada_cop_mes']  = ELEG.ganancia_estimada_cop_mes.round(0).astype('int64')
@@ -157,7 +160,8 @@ dicc_salidas = pd.DataFrame([
  ('region / departamento / ciudad','Ubicación comercial y administrativa','texto'),
  ('zona','Urbana, Periurbana o Rural','texto'),
  ('tipo_negocio','Formato del punto de venta','texto'),
- ('latitud / longitud','Coordenadas para el mapa del tablero','grados'),
+ ('latitud / longitud','Coordenadas de la tienda','grados'),
+ ('lat_long','Las dos coordenadas en un campo, para el mapa de Looker Studio (tipo Geo)','lat, lon'),
  ('estrato','Estrato socioeconómico predominante (1 a 6)','entero'),
  ('temperatura_media_c','Temperatura media de la ubicación','°C'),
  ('area_m2','Área del local','m²'),
